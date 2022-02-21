@@ -7,16 +7,20 @@ import (
 
 // Package Level Global Variables
 var conferenceName = "Go Conference"
+
 const conferenceTickets uint8 = 50
+
 var remainingTickets uint8 = 50
 var bookings = []string{}
 
+// create a nice greeting for users logging onto the app
 func greetUsers(confName string, confTickets uint8, remainTickets uint8) {
 	fmt.Printf("Welcome to %v booking application\n", confName)
 	fmt.Printf("We have a total of %v tickets and %v are still availible\n", confTickets, remainTickets)
 	fmt.Println("Get your tickets here to attend")
 }
 
+// Gather details from the user
 func collectUserInput() (string, string, string, uint8) {
 	var firstName string
 	var lastName string
@@ -35,6 +39,7 @@ func collectUserInput() (string, string, string, uint8) {
 	return firstName, lastName, email, userTickets
 }
 
+// check the data entered by user to assure program sanity
 func inputValidation(firstName string, lastName string, email string, userTickets uint8) (bool, bool, bool) {
 	isValidName := len(firstName) >= 2 && len(lastName) >= 2
 	isValidEmail := strings.Contains(email, "@")
@@ -42,6 +47,7 @@ func inputValidation(firstName string, lastName string, email string, userTicket
 	return isValidName, isValidEmail, isValidTicketNumber
 }
 
+// pull out the first names to make a first name only list
 func getFirstNames() []string {
 	firstNames := []string{}
 	for _, booking := range bookings {
@@ -51,6 +57,7 @@ func getFirstNames() []string {
 	return firstNames
 }
 
+// book the tickets and update the counter
 func bookTickets(firstName string, lastName string, email string, userTickets uint8) {
 	remainingTickets = remainingTickets - userTickets
 	bookings = append(bookings, firstName+" "+lastName)
@@ -59,8 +66,10 @@ func bookTickets(firstName string, lastName string, email string, userTickets ui
 }
 
 func main() {
+	// say hello
 	greetUsers(conferenceName, conferenceTickets, remainingTickets)
 
+	// exit the program once the tickets have been depleted otherwise loop forever
 	for remainingTickets > 0 && len(bookings) < 50 {
 		firstName, lastName, email, userTickets := collectUserInput()
 		isValidName, isValidEmail, isValidTicketNumber := inputValidation(firstName, lastName, email, userTickets)
@@ -71,6 +80,7 @@ func main() {
 			fmt.Printf("The first names of our current bookings: %s\n", firstNames)
 
 		} else {
+			// if inputvalidation failed - tell the user why
 			if !isValidName {
 				fmt.Printf("The name %s %s does not contain at least 2 letters in either the first or last name\n", firstName, lastName)
 			}
