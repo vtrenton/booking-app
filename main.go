@@ -3,16 +3,15 @@ package main
 import (
 	"booking-app/helper"
 	"fmt"
-	"strings"
+	"strconv"
 )
 
 // Package Level Global Variables
-var conferenceName = "Go Conference"
-
 const conferenceTickets uint8 = 50
+const conferenceName = "Go Conference"
 
 var remainingTickets uint8 = 50
-var bookings = []string{}
+var bookings = make([]map[string]string, 0)
 
 // create a nice greeting for users logging onto the app
 func greetUsers() {
@@ -44,8 +43,7 @@ func collectUserInput() (string, string, string, uint8) {
 func getFirstNames() []string {
 	firstNames := []string{}
 	for _, booking := range bookings {
-		var names = strings.Fields(booking)
-		firstNames = append(firstNames, names[0])
+		firstNames = append(firstNames, booking["firstName"])
 	}
 	return firstNames
 }
@@ -53,7 +51,14 @@ func getFirstNames() []string {
 // book the tickets and update the counter
 func bookTickets(firstName string, lastName string, email string, userTickets uint8) {
 	remainingTickets = remainingTickets - userTickets
-	bookings = append(bookings, firstName+" "+lastName)
+
+	var userData = make(map[string]string)
+	userData["firstName"] = firstName
+	userData["lastName"] = lastName
+	userData["email"] = email
+	userData["NumberOfTickets"] = strconv.FormatUint(uint64(userTickets), 10)
+
+	bookings = append(bookings, userData)
 	fmt.Printf("Thank you %s %s for booking %d Tickets! You will recieve an email at %s.\n", firstName, lastName, userTickets, email)
 	fmt.Printf("%d remaining tickets left\n", remainingTickets)
 }
