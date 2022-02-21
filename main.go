@@ -45,6 +45,13 @@ func getFirstNames(bookings []string) []string {
 	return firstNames
 }
 
+func bookTickets(firstName string, lastName string, email string, remainingTickets uint8, userTickets uint8, bookings []string) {
+	remainingTickets = remainingTickets - userTickets
+	bookings = append(bookings, firstName+" "+lastName)
+	fmt.Printf("Thank you %s %s for booking %d Tickets! You will recieve an email at %s.\n", firstName, lastName, userTickets, email)
+	fmt.Printf("%d remaining tickets left\n", remainingTickets)
+}
+
 func main() {
 	conferenceName := "Go Conference"
 	const conferenceTickets uint8 = 50
@@ -58,11 +65,7 @@ func main() {
 		isValidName, isValidEmail, isValidTicketNumber := inputValidation(firstName, lastName, email, userTickets, remainingTickets)
 
 		if isValidName && isValidEmail && isValidTicketNumber {
-			remainingTickets = remainingTickets - userTickets
-			bookings = append(bookings, firstName+" "+lastName)
-
-			fmt.Printf("Thank you %s %s for booking %d Tickets! You will recieve an email at %s.\n", firstName, lastName, userTickets, email)
-			fmt.Printf("%d remaining tickets left\n", remainingTickets)
+			bookTickets(firstName, lastName, email, remainingTickets, userTickets, bookings)
 			firstNames := getFirstNames(bookings)
 			fmt.Printf("The first names of our current bookings: %s\n", firstNames)
 
