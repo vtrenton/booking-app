@@ -7,16 +7,14 @@ import (
 
 // Package Level Global Variables
 var conferenceName = "Go Conference"
-
 const conferenceTickets uint8 = 50
-
 var remainingTickets uint8 = 50
 var bookings = []string{}
 
 // create a nice greeting for users logging onto the app
-func greetUsers(confName string, confTickets uint8, remainTickets uint8) {
-	fmt.Printf("Welcome to %v booking application\n", confName)
-	fmt.Printf("We have a total of %v tickets and %v are still availible\n", confTickets, remainTickets)
+func greetUsers() {
+	fmt.Printf("Welcome to %v booking application\n", conferenceName)
+	fmt.Printf("We have a total of %v tickets and %v are still availible\n", conferenceTickets, remainingTickets)
 	fmt.Println("Get your tickets here to attend")
 }
 
@@ -67,7 +65,7 @@ func bookTickets(firstName string, lastName string, email string, userTickets ui
 
 func main() {
 	// say hello
-	greetUsers(conferenceName, conferenceTickets, remainingTickets)
+	greetUsers()
 
 	// exit the program once the tickets have been depleted otherwise loop forever
 	for remainingTickets > 0 && len(bookings) < 50 {
