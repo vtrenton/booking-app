@@ -1,13 +1,16 @@
 package main
 
 import (
+	"booking-app/helper"
 	"fmt"
 	"strings"
 )
 
 // Package Level Global Variables
 var conferenceName = "Go Conference"
+
 const conferenceTickets uint8 = 50
+
 var remainingTickets uint8 = 50
 var bookings = []string{}
 
@@ -37,14 +40,6 @@ func collectUserInput() (string, string, string, uint8) {
 	return firstName, lastName, email, userTickets
 }
 
-// check the data entered by user to assure program sanity
-func inputValidation(firstName string, lastName string, email string, userTickets uint8) (bool, bool, bool) {
-	isValidName := len(firstName) >= 2 && len(lastName) >= 2
-	isValidEmail := strings.Contains(email, "@")
-	isValidTicketNumber := userTickets > 0 && userTickets <= remainingTickets
-	return isValidName, isValidEmail, isValidTicketNumber
-}
-
 // pull out the first names to make a first name only list
 func getFirstNames() []string {
 	firstNames := []string{}
@@ -70,7 +65,7 @@ func main() {
 	// exit the program once the tickets have been depleted otherwise loop forever
 	for remainingTickets > 0 && len(bookings) < 50 {
 		firstName, lastName, email, userTickets := collectUserInput()
-		isValidName, isValidEmail, isValidTicketNumber := inputValidation(firstName, lastName, email, userTickets)
+		isValidName, isValidEmail, isValidTicketNumber := helper.InputValidation(firstName, lastName, email, userTickets, remainingTickets)
 
 		if isValidName && isValidEmail && isValidTicketNumber {
 			bookTickets(firstName, lastName, email, userTickets)
