@@ -3,6 +3,8 @@ package main
 import (
 	"booking-app/helper"
 	"fmt"
+	"sync"
+	"time"
 )
 
 // Package Level Global Variables
@@ -70,6 +72,17 @@ func bookTickets(firstName string, lastName string, email string, userTickets ui
 	fmt.Printf("%d remaining tickets left\n", remainingTickets)
 }
 
+func sendTicket(firstName string, lastName string, email string, userTickets uint8) {
+	time.Sleep(10 * time.Second)
+	var ticket = fmt.Sprintf("%d tickets for %s %s", userTickets, firstName, lastName)
+	fmt.Println("#########################")
+	fmt.Printf("Sending ticket:\n%s\nto email address %s\n", ticket, email)
+	fmt.Println("#########################")
+	wg.Done()
+}
+
+var wg = sync.WaitGroup{}
+
 func main() {
 	// say hello
 	greetUsers()
@@ -81,6 +94,8 @@ func main() {
 
 		if isValidName && isValidEmail && isValidTicketNumber {
 			bookTickets(firstName, lastName, email, userTickets)
+			wg.Add(1)
+			go sendTicket(firstName, lastName, email, userTickets)
 			firstNames := getFirstNames()
 			fmt.Printf("The first names of our current bookings: %s\n", firstNames)
 
@@ -99,4 +114,5 @@ func main() {
 			//continue
 		}
 	}
+	wg.Wait()
 }
