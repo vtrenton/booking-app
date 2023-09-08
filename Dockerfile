@@ -1,11 +1,9 @@
-FROM golang:1.18-alpine
+FROM golang:1.21-alpine
 
-WORKDIR /usr/local/go/src/booking-app/
+COPY . /booking-app/
 
-COPY helper/ ./helper
-COPY main.go ./
-COPY go.mod ./
+WORKDIR /booking-app/
 
-RUN go build -o /booking-app
+RUN go build -o /booking-app/bin/bookingapp
 
-CMD [ "/booking-app" ]
+CMD [ "/booking-app/bin/bookingapp" ]
